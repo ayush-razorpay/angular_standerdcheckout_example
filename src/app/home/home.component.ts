@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
       name: '', // company name or product name
       description: '',  // product description
       image: './assets/logo.png', // company logo or product image
-     // order_id: val, // order_id created by you in backend
+      order_id: "order_HIX1Sg6hQX2jzd", // order_id created by you in backend
       modal: {
         // We should prevent closing of the form when esc key is pressed.
         escape: false,
@@ -45,13 +45,23 @@ export class HomeComponent implements OnInit {
     options.handler = ((response:any, error:any) => {
       options.response = response;
       console.log(response);
-      console.log(options);
+    //  console.log(options);
       // call your backend api to verify payment signature & capture transaction
     });
   
 
     const rzp = new this.winRef.nativeWindow.Razorpay(options);
     rzp.open();
+
+    rzp.on('payment.failed', function (response:any){
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+});
   }
 
 }
